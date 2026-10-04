@@ -63,33 +63,55 @@
   window.addEventListener("hashchange", function () { showTab(location.hash.slice(1)); });
 
   /* ---------- 링크 ---------- */
+  var SVG_NS = "http://www.w3.org/2000/svg";
+
   function isSafeUrl(url) {
     return typeof url === "string" && /^https?:\/\//i.test(url);
+  }
+
+  function makeIcon(key) {
+    var def = window.ICONS && window.ICONS[key];
+    if (!def) return null;
+    var svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    var path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", def.d);
+    path.setAttribute("fill", def.color);
+    svg.appendChild(path);
+    return svg;
   }
 
   function renderLinks(links) {
     var box = $("linkList");
     box.textContent = "";
     links.forEach(function (l) {
-      if (!isSafeUrl(l.url)) return;
-      var a = document.createElement("a");
-      a.href = l.url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
+      if (l.type === "url" && !isSafeUrl(l.url)) return;
+      if (l.type !== "url" && l.type !== "email") return;
+
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "link";
 
       var badge = document.createElement("span");
       badge.className = "badge";
-      badge.textContent = l.short || String(l.label || "").slice(0, 2).toUpperCase();
+      var icon = makeIcon(l.icon);
+      if (icon) badge.appendChild(icon);
+      else badge.textContent = String(l.label || "").slice(0, 2).toUpperCase();
 
       var label = document.createElement("span");
       label.textContent = l.label;
 
       var arrow = document.createElement("span");
       arrow.className = "arrow";
-      arrow.textContent = "→";
+      arrow.textContent = l.type === "url" ? "→" : "›";
 
-      a.append(badge, label, arrow);
-      box.appendChild(a);
+      btn.append(badge, label, arrow);
+      btn.addEventListener("click", function () {
+        if (l.type === "url") openConfirm(l);
+        else openEmails(l);
+      });
+      box.appendChild(btn);
     });
     if (!box.children.length) {
       var p = document.createElement("div");
@@ -97,6 +119,108 @@
       p.textContent = "등록된 링크가 없어";
       box.appendChild(p);
     }
+  }
+
+  /* ---------- 모달 ---------- */
+  var dlg = $("dlg");
+
+  function openDialog(title, content, actions) {
+    $("dlgTitle").textContent = title;
+    $("dlgContent").textContent = "";
+    $("dlgContent").appendChild(content);
+    var bar = $("dlgActions");
+    bar.textContent = "";
+    actions.forEach(function (a) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = a.text;
+      if (a.primary) b.className = "primary";
+      b.addEventListener("click", function () {
+        dlg.close();
+        if (a.onClick) a.onClick();
+      });
+      bar.appendChild(b);
+    });
+    dlg.showModal();
+  }
+
+  // 모달 바깥(배경)을 누르면 닫기
+  dlg.addEventListener("click", function (e) {
+    if (e.target === dlg) dlg.close();
+  });
+
+  function openConfirm(l) {
+    var box = document.createElement("div");
+    var msg = document.createElement("p");
+    msg.className = "dlg-msg";
+    msg.textContent = l.label + "(으)로 이동하시겠습니까?";
+    var url = document.createElement("div");
+    url.className = "dlg-url";
+    url.textContent = l.url;
+    box.append(msg, url);
+    openDialog("이동", box, [
+      { text: "아니요" },
+      { text: "예", primary: true, onClick: function () { window.open(l.url, "_blank", "noopener,noreferrer"); } }
+    ]);
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      // 모달이 열려 있는 동안 바깥 요소는 포커스를 받지 못하므로 모달 안에 임시 입력칸을 만든다
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      dlg.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      dlg.removeChild(ta);
+      ok ? resolve() : reject(new Error("copy failed"));
+    });
+  }
+
+  function openEmails(l) {
+    var box = document.createElement("div");
+    (l.emails || []).forEach(function (m) {
+      var item = typeof m === "string" ? { address: m } : m;
+      var row = document.createElement("div");
+      row.className = "mail";
+      if (item.label) {
+        var lb = document.createElement("div");
+        lb.className = "ml";
+        lb.textContent = item.label;
+        row.appendChild(lb);
+      }
+      var addr = document.createElement("div");
+      addr.className = "ma";
+      addr.textContent = item.address;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy";
+      btn.textContent = "복사";
+      btn.addEventListener("click", function () {
+        copyText(item.address).then(function () {
+          btn.textContent = "복사됨";
+        }, function () {
+          btn.textContent = "복사 실패";
+        }).then(function () {
+          setTimeout(function () { btn.textContent = "복사"; }, 1500);
+        });
+      });
+      row.append(addr, btn);
+      box.appendChild(row);
+    });
+    if (!box.children.length) {
+      var p = document.createElement("div");
+      p.className = "empty";
+      p.textContent = "등록된 이메일이 없어";
+      box.appendChild(p);
+    }
+    openDialog(l.label, box, [{ text: "닫기" }]);
   }
 
   /* ---------- 달력 ---------- */

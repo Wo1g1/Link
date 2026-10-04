@@ -6,7 +6,10 @@
 
 `data/` 폴더의 JSON 파일만 고치고 커밋하면 1~2분 뒤 반영된다. 이 레포는 퍼블릭이라 파일 내용은 누구나 볼 수 있다.
 
-- `data/links.json`: `label`(이름), `short`(아이콘 자리 2글자), `url`(http/https만 허용)
+- `data/links.json`: 항목마다 `label`, `icon`(`instagram`/`naver`/`gmail`), `type`을 적는다.
+  - `type: "url"`: `url`(http/https만 허용). 누르면 "이동하시겠습니까?" 확인 후 새 창으로 열린다.
+  - `type: "email"`: `emails` 배열에 `{ "label": "설명", "address": "주소" }`를 원하는 만큼 넣는다. 누르면 모달에 주소 목록과 복사 버튼이 뜬다.
+  - 아이콘은 `js/icons.js`에 있다.
 - `data/events.json`: `date`(YYYY-MM-DD), `title`, 선택 항목 `memo`, `endDate`(여러 날 일정)
 - `data/notices.json`: `date`(YYYY-MM-DD), `title`, `body`. 최신순으로 표시된다.
 

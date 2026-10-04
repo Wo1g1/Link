@@ -78,10 +78,11 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 /* ---------- 링크 ---------- */
 .links { display: flex; flex-direction: column; gap: 10px; }
 
-.links a {
+.link {
   display: flex;
   align-items: center;
   gap: 14px;
+  width: 100%;
   min-height: 60px;
   padding: 12px 16px;
   background: var(--card);
@@ -89,13 +90,14 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   border-radius: 14px;
   color: var(--text);
   font-weight: 600;
-  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
 }
 
-.links a:active { border-color: var(--accent); }
+.link:active { border-color: var(--accent); }
 
 @media (hover: hover) {
-  .links a:hover { border-color: var(--accent); }
+  .link:hover { border-color: var(--accent); }
 }
 
 .badge {
@@ -106,10 +108,9 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   place-items: center;
   border-radius: 9px;
   background: var(--accent-soft);
-  color: var(--accent-text);
-  font-size: 13px;
-  font-weight: 700;
 }
+
+.badge svg { width: 20px; height: 20px; }
 
 .arrow { margin-left: auto; color: var(--muted); font-weight: 400; }
 
@@ -219,5 +220,74 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .links a, .tab, .day { transition: background-color 0.12s, border-color 0.12s; }
+  .link, .tab, .day { transition: background-color 0.12s, border-color 0.12s; }
+}
+
+/* ---------- 모달 ---------- */
+body:has(dialog[open]) { overflow: hidden; }
+
+dialog {
+  width: min(92vw, 420px);
+  max-height: 85vh;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--text);
+}
+
+dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+
+.dlg-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 85vh;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.dlg-body h2 { margin: 0; font-size: 18px; }
+.dlg-msg { margin: 0; }
+.dlg-url { margin-top: 6px; font-size: 14px; color: var(--muted); }
+
+.dlg-actions { display: flex; gap: 8px; }
+
+.dlg-actions button {
+  flex: 1;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dlg-actions .primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.mail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.mail .ml { font-size: 13px; color: var(--muted); }
+.mail .ma { font-weight: 600; user-select: all; }
+
+.mail .copy {
+  min-height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-weight: 600;
+  cursor: pointer;
 }
