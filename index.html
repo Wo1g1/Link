@@ -24,7 +24,10 @@
     <section class="panel" id="p-calendar" role="tabpanel" aria-labelledby="t-calendar" hidden>
       <div class="card">
         <div class="cal-head">
-          <h2 id="calTitle"></h2>
+          <div class="cal-title">
+            <select id="yearSel" aria-label="년도"></select>
+            <select id="monthSel" aria-label="월"></select>
+          </div>
           <div class="cal-nav">
             <button type="button" id="prev" aria-label="이전 달">&lsaquo;</button>
             <button type="button" id="next" aria-label="다음 달">&rsaquo;</button>
@@ -32,7 +35,7 @@
         </div>
         <div class="grid" id="dows"></div>
         <div class="grid" id="days"></div>
-        <div class="events">
+        <div class="events" id="events" hidden>
           <h3 id="selLabel"></h3>
           <div id="evList"></div>
         </div>

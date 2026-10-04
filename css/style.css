@@ -6,23 +6,28 @@
   --line: #e4e2da;
   --accent: #2f5bea;
   --accent-ink: #ffffff;
+  --accent-text: #2f5bea;
   --accent-soft: #e8edfd;
   --today: #fff3d6;
   --danger: #c0392b;
+  --danger-ink: #ffffff;
 }
 
+/* 다크모드: #628395(포인트), #f3f6f7(글자)을 기준으로 한 청회색 계열 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #131316;
-    --card: #1c1c21;
-    --text: #ececf0;
-    --muted: #9a9aa5;
-    --line: #2b2b33;
-    --accent: #7b9bff;
-    --accent-ink: #10131f;
-    --accent-soft: #232a45;
-    --today: #3a3220;
+    --bg: #101417;
+    --card: #171d21;
+    --text: #f3f6f7;
+    --muted: #9db0ba;
+    --line: #2c353b;
+    --accent: #628395;
+    --accent-ink: #0d1215;
+    --accent-text: #8fb0c3;
+    --accent-soft: #1f2b33;
+    --today: #3a4d57;
     --danger: #ff7b6b;
+    --danger-ink: #1a0d0b;
   }
 }
 
@@ -93,12 +98,13 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   margin-left: 6px;
   border-radius: 9px;
   background: var(--danger);
-  color: #fff;
+  color: var(--danger-ink);
   font-size: 12px;
   line-height: 18px;
   vertical-align: middle;
 }
 
+.count[hidden],
 .panel[hidden] { display: none; }
 
 /* ---------- 링크 ---------- */
@@ -132,7 +138,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   place-items: center;
   border-radius: 9px;
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 13px;
   font-weight: 700;
 }
@@ -151,13 +157,27 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 
 /* ---------- 달력 ---------- */
 .cal-head {
+  gap: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.cal-head h2 { font-size: 18px; margin: 0; }
+.cal-title { display: flex; gap: 6px; min-width: 0; }
+
+.cal-title select {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+}
 
 .cal-nav { display: flex; gap: 6px; }
 
@@ -203,6 +223,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   background: var(--accent);
 }
 
+.events[hidden] { display: none; }
 .events { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
 .events h3 { margin: 0 0 10px; font-size: 15px; color: var(--muted); font-weight: 600; }
 

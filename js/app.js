@@ -2,7 +2,7 @@
   "use strict";
 
   var TABS = ["links", "calendar", "notices"];
-  var RECENT_DAYS = 7;
+  var STORE_KEY = "link.noticesSeen";
 
   var $ = function (id) { return document.getElementById(id); };
   var pad = function (n) { return String(n).padStart(2, "0"); };
@@ -11,6 +11,9 @@
   var today = new Date();
   var state = {
     events: [],
+    eventsError: false,
+    notices: null,
+    activeTab: "links",
     view: new Date(today.getFullYear(), today.getMonth(), 1),
     selected: fmt(today)
   };
@@ -34,6 +37,7 @@
   /* ---------- 탭 ---------- */
   function showTab(name) {
     if (TABS.indexOf(name) === -1) name = "links";
+    state.activeTab = name;
     TABS.forEach(function (t) {
       var on = t === name;
       $("p-" + t).hidden = !on;
@@ -43,6 +47,7 @@
     try {
       if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
     } catch (e) { /* 일부 환경에서는 주소 갱신이 막혀 있음 */ }
+    updateNoticeBadge();
   }
 
   document.querySelector(".tabs").addEventListener("click", function (e) {
@@ -108,7 +113,9 @@
 
   function renderCalendar() {
     var v = state.view;
-    $("calTitle").textContent = v.getFullYear() + "년 " + (v.getMonth() + 1) + "월";
+    syncYearOptions(v.getFullYear());
+    $("yearSel").value = v.getFullYear();
+    $("monthSel").value = v.getMonth();
 
     var start = new Date(v.getFullYear(), v.getMonth(), 1);
     start.setDate(1 - start.getDay());
@@ -146,13 +153,13 @@
     var box = $("evList");
     box.textContent = "";
     var evs = eventsOn(state.selected);
-    if (!evs.length) {
-      var p = document.createElement("div");
-      p.className = "empty";
-      p.textContent = "등록된 일정이 없어";
-      box.appendChild(p);
+    if (state.eventsError) {
+      $("events").hidden = false;
+      showError(box, "일정");
       return;
     }
+    $("events").hidden = !evs.length;
+    if (!evs.length) return;
     evs.forEach(function (e) {
       var el = document.createElement("div");
       el.className = "ev";
@@ -191,6 +198,36 @@
     renderCalendar();
   });
 
+  function onPick() {
+    state.view = new Date(Number($("yearSel").value), Number($("monthSel").value), 1);
+    renderCalendar();
+  }
+  $("yearSel").addEventListener("change", onPick);
+  $("monthSel").addEventListener("change", onPick);
+
+  /* 년도 선택 범위: 현재 기준 -5 ~ +10년. 일정 데이터나 현재 보는 달이 범위 밖이면 그 년도까지 넓힘 */
+  var yearMin = null, yearMax = null;
+  function syncYearOptions(viewYear) {
+    var lo = today.getFullYear() - 5, hi = today.getFullYear() + 10;
+    state.events.forEach(function (e) {
+      lo = Math.min(lo, Number(e.date.slice(0, 4)));
+      hi = Math.max(hi, Number((e.endDate || e.date).slice(0, 4)));
+    });
+    lo = Math.min(lo, viewYear);
+    hi = Math.max(hi, viewYear);
+    if (lo === yearMin && hi === yearMax) return;
+    yearMin = lo;
+    yearMax = hi;
+    var sel = $("yearSel");
+    sel.textContent = "";
+    for (var y = lo; y <= hi; y++) {
+      var o = document.createElement("option");
+      o.value = y;
+      o.textContent = y + "년";
+      sel.appendChild(o);
+    }
+  }
+
   /* ---------- 알림 ---------- */
   function renderNotices(notices) {
     var sorted = notices.slice().sort(function (a, b) { return b.date.localeCompare(a.date); });
@@ -220,14 +257,48 @@
       box.appendChild(el);
     });
 
-    // 최근 RECENT_DAYS일 이내 알림이 있으면 탭에 개수 표시
-    var limit = new Date(today.getFullYear(), today.getMonth(), today.getDate() - RECENT_DAYS);
-    var recent = sorted.filter(function (n) { return n.date >= fmt(limit); }).length;
-    $("nCount").textContent = recent;
-    $("nCount").hidden = recent === 0;
+    state.notices = sorted;
+    updateNoticeBadge();
+  }
+
+  /* 알림 읽음 상태: 브라우저(localStorage)에 본 알림 목록을 저장. 알림 탭을 열면 모두 읽음 처리됨 */
+  function noticeSig(n) { return n.date + "|" + n.title; }
+
+  function readSeen() {
+    var raw;
+    try { raw = localStorage.getItem(STORE_KEY); } catch (e) { return null; }  // 저장소 사용 불가
+    if (!raw) return [];
+    try {
+      var v = JSON.parse(raw);
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+
+  function writeSeen(list) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) { /* 무시 */ }
+  }
+
+  function updateNoticeBadge() {
+    var badge = $("nCount");
+    var seen = readSeen();
+    if (!state.notices || seen === null) { badge.hidden = true; return; }  // 저장소를 못 쓰면 배지를 숨김
+    if (state.activeTab === "notices") {
+      seen = state.notices.map(noticeSig);
+      writeSeen(seen);
+    }
+    var unseen = state.notices.filter(function (n) { return seen.indexOf(noticeSig(n)) === -1; }).length;
+    badge.textContent = unseen;
+    badge.hidden = unseen === 0;
   }
 
   /* ---------- 시작 ---------- */
+  for (var m = 0; m < 12; m++) {
+    var mo = document.createElement("option");
+    mo.value = m;
+    mo.textContent = (m + 1) + "월";
+    $("monthSel").appendChild(mo);
+  }
+
   $("dows").append.apply($("dows"), ["일", "월", "화", "수", "목", "금", "토"].map(function (n) {
     var d = document.createElement("div");
     d.className = "dow";
@@ -242,6 +313,9 @@
   load("data/events.json").then(function (ev) {
     state.events = ev;
     renderCalendar();
-  }).catch(function () { showError($("evList"), "일정"); });
+  }).catch(function () {
+    state.eventsError = true;
+    renderEventList();
+  });
   load("data/notices.json").then(renderNotices).catch(function () { showError($("noticeList"), "알림"); });
 })();
