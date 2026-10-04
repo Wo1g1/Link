@@ -1,32 +1,17 @@
+/* 다크모드 고정: #628395(포인트), #f3f6f7(글자)을 기준으로 한 청회색 계열 */
 :root {
-  --bg: #f4f3ef;
-  --card: #ffffff;
-  --text: #1d1d1f;
-  --muted: #6b6b72;
-  --line: #e4e2da;
-  --accent: #2f5bea;
-  --accent-ink: #ffffff;
-  --accent-text: #2f5bea;
-  --accent-soft: #e8edfd;
-  --today: #fff3d6;
-  --danger: #c0392b;
-}
-
-/* 다크모드: #628395(포인트), #f3f6f7(글자)을 기준으로 한 청회색 계열 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #101417;
-    --card: #171d21;
-    --text: #f3f6f7;
-    --muted: #9db0ba;
-    --line: #2c353b;
-    --accent: #628395;
-    --accent-ink: #0d1215;
-    --accent-text: #8fb0c3;
-    --accent-soft: #1f2b33;
-    --today: #3a4d57;
-    --danger: #ff7b6b;
-  }
+  color-scheme: dark;
+  --bg: #101417;
+  --card: #171d21;
+  --text: #f3f6f7;
+  --muted: #9db0ba;
+  --line: #2c353b;
+  --accent: #628395;
+  --accent-ink: #0d1215;
+  --accent-text: #8fb0c3;
+  --accent-soft: #1f2b33;
+  --today: #3a4d57;
+  --danger: #ff7b6b;
 }
 
 * { box-sizing: border-box; }
