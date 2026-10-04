@@ -1,0 +1,7 @@
+[
+  { "label": "Instagram", "short": "IG", "url": "https://www.instagram.com/" },
+  { "label": "GitHub", "short": "GH", "url": "https://github.com/wo1g1" },
+  { "label": "YouTube", "short": "YT", "url": "https://www.youtube.com/" },
+  { "label": "X (Twitter)", "short": "X", "url": "https://x.com/" },
+  { "label": "Blog", "short": "BL", "url": "https://example.com/" }
+]
