@@ -2,7 +2,6 @@
   "use strict";
 
   var TABS = ["links", "calendar", "notices"];
-  var STORE_KEY = "link.noticesSeen";
 
   var $ = function (id) { return document.getElementById(id); };
   var pad = function (n) { return String(n).padStart(2, "0"); };
@@ -12,8 +11,6 @@
   var state = {
     events: [],
     eventsError: false,
-    notices: null,
-    activeTab: "links",
     view: new Date(today.getFullYear(), today.getMonth(), 1),
     selected: fmt(today)
   };
@@ -37,7 +34,6 @@
   /* ---------- 탭 ---------- */
   function showTab(name) {
     if (TABS.indexOf(name) === -1) name = "links";
-    state.activeTab = name;
     TABS.forEach(function (t) {
       var on = t === name;
       $("p-" + t).hidden = !on;
@@ -47,7 +43,6 @@
     try {
       if (location.hash.slice(1) !== name) history.replaceState(null, "", "#" + name);
     } catch (e) { /* 일부 환경에서는 주소 갱신이 막혀 있음 */ }
-    updateNoticeBadge();
   }
 
   document.querySelector(".tabs").addEventListener("click", function (e) {
@@ -256,39 +251,6 @@
       el.append(t, b, d);
       box.appendChild(el);
     });
-
-    state.notices = sorted;
-    updateNoticeBadge();
-  }
-
-  /* 알림 읽음 상태: 브라우저(localStorage)에 본 알림 목록을 저장. 알림 탭을 열면 모두 읽음 처리됨 */
-  function noticeSig(n) { return n.date + "|" + n.title; }
-
-  function readSeen() {
-    var raw;
-    try { raw = localStorage.getItem(STORE_KEY); } catch (e) { return null; }  // 저장소 사용 불가
-    if (!raw) return [];
-    try {
-      var v = JSON.parse(raw);
-      return Array.isArray(v) ? v : [];
-    } catch (e) { return []; }
-  }
-
-  function writeSeen(list) {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) { /* 무시 */ }
-  }
-
-  function updateNoticeBadge() {
-    var badge = $("nCount");
-    var seen = readSeen();
-    if (!state.notices || seen === null) { badge.hidden = true; return; }  // 저장소를 못 쓰면 배지를 숨김
-    if (state.activeTab === "notices") {
-      seen = state.notices.map(noticeSig);
-      writeSeen(seen);
-    }
-    var unseen = state.notices.filter(function (n) { return seen.indexOf(noticeSig(n)) === -1; }).length;
-    badge.textContent = unseen;
-    badge.hidden = unseen === 0;
   }
 
   /* ---------- 시작 ---------- */

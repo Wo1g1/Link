@@ -8,7 +8,7 @@
 
 - `data/links.json`: `label`(이름), `short`(아이콘 자리 2글자), `url`(http/https만 허용)
 - `data/events.json`: `date`(YYYY-MM-DD), `title`, 선택 항목 `memo`, `endDate`(여러 날 일정)
-- `data/notices.json`: `date`(YYYY-MM-DD), `title`, `body`. 최신순으로 표시된다. 아직 안 본 알림 개수가 탭에 배지로 뜨고, 알림 탭을 열면 사라진다. 읽음 상태는 방문자 브라우저에만 저장되며, 날짜나 제목이 바뀐 알림은 새 알림으로 취급된다.
+- `data/notices.json`: `date`(YYYY-MM-DD), `title`, `body`. 최신순으로 표시된다.
 
 달력의 년도 선택 범위는 올해 기준 -5년 ~ +10년이고, 일정이 그 밖에 있으면 자동으로 넓어진다.
 

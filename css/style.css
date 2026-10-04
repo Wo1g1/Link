@@ -10,7 +10,6 @@
   --accent-soft: #e8edfd;
   --today: #fff3d6;
   --danger: #c0392b;
-  --danger-ink: #ffffff;
 }
 
 /* 다크모드: #628395(포인트), #f3f6f7(글자)을 기준으로 한 청회색 계열 */
@@ -27,7 +26,6 @@
     --accent-soft: #1f2b33;
     --today: #3a4d57;
     --danger: #ff7b6b;
-    --danger-ink: #1a0d0b;
   }
 }
 
@@ -90,21 +88,6 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   color: var(--accent-ink);
 }
 
-.count {
-  display: inline-block;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  margin-left: 6px;
-  border-radius: 9px;
-  background: var(--danger);
-  color: var(--danger-ink);
-  font-size: 12px;
-  line-height: 18px;
-  vertical-align: middle;
-}
-
-.count[hidden],
 .panel[hidden] { display: none; }
 
 /* ---------- 링크 ---------- */
