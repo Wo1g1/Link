@@ -12,7 +12,7 @@
   - 아이콘은 `js/icons.js`에 있다.
 - `data/events.json`: `date`(YYYY-MM-DD), `title`, 선택 항목 `time`(시간 표시 문구), `memo`, `endDate`(여러 날 일정), `place`(장소명 또는 주소. 넣으면 그 일정 아래에 구글맵 지도가 표시된다)
 - `data/holidays.json`: `date`(YYYY-MM-DD), `name`. 공휴일은 달력에서 날짜가 빨간색으로 표시되고, 날짜를 누르면 이름이 나온다. 현재 2026년 8월 ~ 2027년 2월까지 들어 있다.
-- `data/notices.json`: `date`(YYYY-MM-DD), `title`, `body`. 최신순으로 표시된다.
+- `data/notices.json`: `date`(YYYY-MM-DD), `title`, `body`. 최신순으로 제목만 표시되고, 누르면 모달에 내용(`body`)과 날짜가 나온다. 줄바꿈은 `\n`으로 쓴다.
 
 달력의 년도 선택 범위는 올해 기준 -5년 ~ +10년이고, 일정이 그 밖에 있으면 자동으로 넓어진다.
 

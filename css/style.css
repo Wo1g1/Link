@@ -210,16 +210,26 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 
 /* ---------- 알림 ---------- */
 .notice {
-  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 16px;
   margin-bottom: 10px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
 }
 
 .notice .nt { font-weight: 700; }
-.notice .nb { margin-top: 2px; white-space: pre-wrap; }
-.notice .nd { margin-top: 8px; font-size: 13px; color: var(--muted); }
+
+@media (hover: hover) {
+  .notice:hover { border-color: var(--accent); }
+}
 
 /* ---------- 작은 화면 ---------- */
 @media (max-width: 380px) {
@@ -256,7 +266,7 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
 }
 
 .dlg-body h2 { margin: 0; font-size: 18px; }
-.dlg-msg { margin: 0; }
+.dlg-msg { margin: 0; white-space: pre-wrap; }
 .dlg-url { margin-top: 6px; font-size: 14px; color: var(--muted); }
 
 .dlg-actions { display: flex; gap: 8px; }

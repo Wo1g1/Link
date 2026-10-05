@@ -377,6 +377,18 @@
   }
 
   /* ---------- 알림 ---------- */
+  function openNotice(n) {
+    var box = document.createElement("div");
+    var body = document.createElement("p");
+    body.className = "dlg-msg";
+    body.textContent = n.body;
+    var date = document.createElement("div");
+    date.className = "dlg-url";
+    date.textContent = n.date;
+    box.append(body, date);
+    openDialog(n.title, box, [{ text: "닫기" }]);
+  }
+
   function renderNotices(notices) {
     var sorted = notices.slice().sort(function (a, b) { return b.date.localeCompare(a.date); });
     var box = $("noticeList");
@@ -390,18 +402,17 @@
     }
 
     sorted.forEach(function (n) {
-      var el = document.createElement("div");
+      var el = document.createElement("button");
+      el.type = "button";
       el.className = "notice";
-      var t = document.createElement("div");
+      var t = document.createElement("span");
       t.className = "nt";
       t.textContent = n.title;
-      var b = document.createElement("div");
-      b.className = "nb";
-      b.textContent = n.body;
-      var d = document.createElement("div");
-      d.className = "nd";
-      d.textContent = n.date;
-      el.append(t, b, d);
+      var arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.textContent = "›";
+      el.append(t, arrow);
+      el.addEventListener("click", function () { openNotice(n); });
       box.appendChild(el);
     });
   }
