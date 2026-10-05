@@ -275,21 +275,30 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
 .mail {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  margin-bottom: 10px;
+  gap: 4px;
+  padding: 8px 8px 8px 14px;
+  margin-bottom: 16px;
   border: 1px solid var(--line);
   border-radius: 12px;
 }
 
-.mail .ml { font-size: 13px; color: var(--muted); }
-.mail .ma { font-weight: 600; user-select: all; }
+.mail:last-child { margin-bottom: 0; }
 
+.mail .ml { padding-top: 4px; font-size: 13px; color: var(--muted); }
+
+.mrow { display: flex; align-items: center; gap: 8px; }
+
+.mail .ma { flex: 1; min-width: 0; font-weight: 600; user-select: all; }
+
+/* 복사 버튼: 박스·테두리 없이 글자만 보이고, 터치 영역(44px)은 유지 */
 .mail .copy {
+  flex: none;
+  min-width: 56px;
   min-height: 44px;
+  padding: 0 10px;
   border: 0;
-  border-radius: 10px;
-  background: var(--accent-soft);
+  border-radius: 8px;
+  background: none;
   color: var(--accent-text);
   font-weight: 600;
   cursor: pointer;

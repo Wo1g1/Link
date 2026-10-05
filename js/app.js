@@ -211,7 +211,10 @@
           setTimeout(function () { btn.textContent = "복사"; }, 1500);
         });
       });
-      row.append(addr, btn);
+      var line = document.createElement("div");
+      line.className = "mrow";
+      line.append(addr, btn);
+      row.appendChild(line);
       box.appendChild(row);
     });
     if (!box.children.length) {
