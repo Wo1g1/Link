@@ -3,27 +3,21 @@
     "label": "Instagram",
     "icon": "instagram",
     "type": "url",
-    "url": "https://www.instagram.com/"
+    "url": "https://www.instagram.com/wvvwwvvvwvwvvw/"
   },
   {
     "label": "Blog",
     "icon": "naver",
     "type": "url",
-    "url": "https://blog.naver.com/"
+    "url": "https://blog.naver.com/wo1g1"
   },
   {
     "label": "Email",
     "icon": "gmail",
     "type": "email",
     "emails": [
-      {
-        "label": "개인",
-        "address": "example1@example.com"
-      },
-      {
-        "label": "업무",
-        "address": "example2@example.com"
-      }
+      { "address": "kwon9528@gmail.com" },
+      { "address": "kwonfox@naver.com" }
     ]
   }
 ]
