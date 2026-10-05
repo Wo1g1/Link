@@ -1,16 +1,16 @@
-/* 다크모드 고정: #628395(포인트), #f3f6f7(글자)을 기준으로 한 청회색 계열 */
+/* 다크모드 고정: 어두운 보라 베이스에 선명한 보라 포인트 */
 :root {
   color-scheme: dark;
-  --bg: #101417;
-  --card: #171d21;
-  --text: #f3f6f7;
-  --muted: #9db0ba;
-  --line: #2c353b;
-  --accent: #628395;
-  --accent-ink: #0d1215;
-  --accent-text: #8fb0c3;
-  --accent-soft: #1f2b33;
-  --today: #3a4d57;
+  --bg: #15111e;
+  --card: #1c182b;
+  --text: #f4f1fa;
+  --muted: #a99fc2;
+  --line: #2f2845;
+  --accent: #9b72dd;
+  --accent-ink: #0f0b18;
+  --accent-text: #b9a0f0;
+  --accent-soft: #27203e;
+  --today: #3d3268;
   --danger: #ff7b6b;
 }
 
@@ -76,7 +76,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .panel[hidden] { display: none; }
 
 /* ---------- 링크 ---------- */
-.links { display: flex; flex-direction: column; gap: 18px; }
+.links { display: flex; flex-direction: column; gap: 28px; }
 
 .link {
   display: flex;
