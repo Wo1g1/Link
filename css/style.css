@@ -76,7 +76,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .panel[hidden] { display: none; }
 
 /* ---------- 링크 ---------- */
-.links { display: flex; flex-direction: column; gap: 28px; }
+.links { display: flex; flex-direction: column; gap: 58px; }
 
 .link {
   display: flex;
