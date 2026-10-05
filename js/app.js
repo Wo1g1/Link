@@ -10,6 +10,7 @@
   var today = new Date();
   var state = {
     events: [],
+    holidays: {},
     eventsError: false,
     view: new Date(today.getFullYear(), today.getMonth(), 1),
     selected: fmt(today)
@@ -252,9 +253,10 @@
       b.className = "day" +
         (d.getMonth() !== v.getMonth() ? " out" : "") +
         (key === fmt(today) ? " today" : "") +
-        (key === state.selected ? " sel" : "");
+        (key === state.selected ? " sel" : "") +
+        (state.holidays[key] ? " hol" : "");
       b.textContent = d.getDate();
-      b.setAttribute("aria-label", (d.getMonth() + 1) + "월 " + d.getDate() + "일" + (eventsOn(key).length ? ", 일정 있음" : ""));
+      b.setAttribute("aria-label", (d.getMonth() + 1) + "월 " + d.getDate() + "일" + (eventsOn(key).length ? ", 일정 있음" : "") + (state.holidays[key] ? ", " + state.holidays[key] : ""));
       if (key === state.selected) b.setAttribute("aria-pressed", "true");
       if (eventsOn(key).length) {
         var dot = document.createElement("span");
@@ -280,8 +282,14 @@
       showError(box, "일정");
       return;
     }
-    $("events").hidden = !evs.length;
-    if (!evs.length) return;
+    var holiday = state.holidays[state.selected];
+    $("events").hidden = !evs.length && !holiday;
+    if (holiday) {
+      var h = document.createElement("div");
+      h.className = "hol-name";
+      h.textContent = holiday;
+      box.appendChild(h);
+    }
     evs.forEach(function (e) {
       var el = document.createElement("div");
       el.className = "ev";
@@ -289,6 +297,12 @@
       t.className = "t";
       t.textContent = e.title;
       el.appendChild(t);
+      if (e.time) {
+        var tm = document.createElement("div");
+        tm.className = "tm";
+        tm.textContent = e.time;
+        el.appendChild(tm);
+      }
       if (e.memo) {
         var m = document.createElement("div");
         m.className = "m";
@@ -418,5 +432,9 @@
     state.eventsError = true;
     renderEventList();
   });
+  load("data/holidays.json").then(function (list) {
+    list.forEach(function (h) { state.holidays[h.date] = h.name; });
+    renderCalendar();
+  }).catch(function () { /* 공휴일 표시는 없어도 달력은 동작 */ });
   load("data/notices.json").then(renderNotices).catch(function () { showError($("noticeList"), "알림"); });
 })();

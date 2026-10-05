@@ -181,6 +181,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 }
 
 .day.out { color: var(--muted); opacity: 0.45; }
+.day.hol { color: var(--danger); }
 .day.today { background: var(--today); }
 .day.sel { background: var(--accent-soft); border-color: var(--accent); }
 
@@ -199,8 +200,11 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .events { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
 .events h3 { margin: 0 0 10px; font-size: 15px; color: var(--muted); font-weight: 600; }
 
+.hol-name { margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--danger); }
+
 .ev { padding: 10px 12px; margin-bottom: 8px; border-radius: 10px; background: var(--accent-soft); }
 .ev .t { font-size: 16px; font-weight: 600; }
+.ev .tm { margin-top: 2px; font-size: 14px; color: var(--accent-text); }
 .ev .m { margin-top: 2px; font-size: 14px; color: var(--muted); }
 .ev .map { display: block; width: 100%; height: 220px; margin-top: 10px; border: 0; border-radius: 10px; }
 
