@@ -295,8 +295,20 @@
         m.textContent = e.memo;
         el.appendChild(m);
       }
+      if (e.place) el.appendChild(makeMap(e.place));
       box.appendChild(el);
     });
+  }
+
+  // 키 없이 장소명/주소만으로 구글맵 지도를 삽입 (길찾기 없이 주변 지도만 표시)
+  function makeMap(place) {
+    var f = document.createElement("iframe");
+    f.className = "map";
+    f.title = "지도: " + place;
+    f.loading = "lazy";
+    f.referrerPolicy = "no-referrer-when-downgrade";
+    f.src = "https://www.google.com/maps?q=" + encodeURIComponent(place) + "&output=embed&hl=ko";
+    return f;
   }
 
   $("days").addEventListener("click", function (e) {

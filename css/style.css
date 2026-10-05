@@ -202,6 +202,7 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
 .ev { padding: 10px 12px; margin-bottom: 8px; border-radius: 10px; background: var(--accent-soft); }
 .ev .t { font-size: 16px; font-weight: 600; }
 .ev .m { margin-top: 2px; font-size: 14px; color: var(--muted); }
+.ev .map { display: block; width: 100%; height: 220px; margin-top: 10px; border: 0; border-radius: 10px; }
 
 /* ---------- 알림 ---------- */
 .notice {

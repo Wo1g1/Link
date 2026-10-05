@@ -10,7 +10,7 @@
   - `type: "url"`: `url`(http/https만 허용). 누르면 "이동하시겠습니까?" 확인 후 새 창으로 열린다.
   - `type: "email"`: `emails` 배열에 `{ "label": "설명", "address": "주소" }`를 원하는 만큼 넣는다. 누르면 모달에 주소 목록과 복사 버튼이 뜬다.
   - 아이콘은 `js/icons.js`에 있다.
-- `data/events.json`: `date`(YYYY-MM-DD), `title`, 선택 항목 `memo`, `endDate`(여러 날 일정)
+- `data/events.json`: `date`(YYYY-MM-DD), `title`, 선택 항목 `memo`, `endDate`(여러 날 일정), `place`(장소명 또는 주소. 넣으면 그 일정 아래에 구글맵 지도가 표시된다)
 - `data/notices.json`: `date`(YYYY-MM-DD), `title`, `body`. 최신순으로 표시된다.
 
 달력의 년도 선택 범위는 올해 기준 -5년 ~ +10년이고, 일정이 그 밖에 있으면 자동으로 넓어진다.
